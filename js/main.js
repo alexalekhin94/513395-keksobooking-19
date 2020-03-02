@@ -13,15 +13,15 @@ Object.defineProperty(
 
 function advArrayGenerator(){
 
-  let arrayFinal = [];
-  let arrayAvatar = shuffle([1,2,3,4,5,6,7,8])
-  let arrayTitle = shuffle (['Топовая хибара','Так себе халупа','Лакшери хотел','Общаги ПТУ','МИД','Лучше чем Хилтон','Замок с приведениями','Конура класса люкс']);
-  let typeArray = ['palace', 'flat', 'house', 'bungalo'];
-  let checkinTimes = ['12:00','13:00','14:00'];
-  let checkoutTimes = ['12:00','13:00','14:00'];
-  let featuresArray = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",];
-  let fotoArray = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
-  let locationPin = {
+  var arrayFinal = [];
+  var arrayAvatar = shuffle([1,2,3,4,5,6,7,8])
+  var arrayTitle = shuffle (['Топовая хибара','Так себе халупа','Лакшери хотел','Общаги ПТУ','МИД','Лучше чем Хилтон','Замок с приведениями','Конура класса люкс']);
+  var typeArray = ['palace', 'flat', 'house', 'bungalo'];
+  var checkinTimes = ['12:00','13:00','14:00'];
+  var checkoutTimes = ['12:00','13:00','14:00'];
+  var featuresArray = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",];
+  var fotoArray = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+  var locationPin = {
     'y_min':130,
     'y_max':630,
     'x_min':0,
@@ -73,12 +73,12 @@ function shuffle(array) {
 }
 
 //
-let randomArrayGenerator = function(array){
-  let randomArray=[]
-  let arrayforMocap = array.map(item => item);
-  let arrayCount = Math.floor(Math.random() * array.length);
-  for ( let i = 0; i < arrayCount; i++ ) {
-    let ind = Math.floor(Math.random() * array.length);
+var randomArrayGenerator = function(array){
+  var randomArray=[]
+  var arrayforMocap = array.map(item => item);
+  var arrayCount = Math.floor(Math.random() * array.length);
+  for ( var i = 0; i < arrayCount; i++ ) {
+    var ind = Math.floor(Math.random() * array.length);
     randomArray.push(array[ind])
     arrayforMocap.splice(ind, 1);
   }
@@ -91,17 +91,17 @@ let randomArrayGenerator = function(array){
 
 //Insert in DOM
 
-let offerArray = advArrayGenerator();
+var offerArray = advArrayGenerator();
 console.log(offerArray)
-let pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin')
-let pinsArray = document.querySelector('.map__pins')
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin')
+var pinsArray = document.querySelector('.map__pins')
 
-for (let i = 0; i < offerArray.length; i++){
-  let element = pinTemplate.cloneNode(true);
+for (var i = 0; i < offerArray.length; i++){
+  var element = pinTemplate.cloneNode(true);
   element.style.left = offerArray[i].location.x +'px';
   element.style.top = offerArray[i].location.y+'px';
 
-  let pinImg = element.querySelector('img');
+  var pinImg = element.querySelector('img');
   console.log(pinImg)
   pinImg.src = offerArray[i].author.avatar;
   pinsArray.appendChild(element)
