@@ -92,18 +92,84 @@ var randomArrayGenerator = function(array){
 //Insert in DOM
 
 var offerArray = advArrayGenerator();
-console.log(offerArray)
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin')
 var pinsArray = document.querySelector('.map__pins')
+var fragment = document.createDocumentFragment();
+
+function renderPin(offerArrayItem){
+  var pinElement = pinTemplate.cloneNode(true);
+  pinElement.style.left = offerArrayItem.location.x +'px';
+  pinElement.style.top = offerArrayItem.location.y+'px';
+  // var pinImg = pinElement.querySelector('img');
+  pinElement.querySelector('img').src = offerArrayItem.author.avatar;
+  return pinElement;
+}
 
 for (var i = 0; i < offerArray.length; i++){
-  var element = pinTemplate.cloneNode(true);
-  element.style.left = offerArray[i].location.x +'px';
-  element.style.top = offerArray[i].location.y+'px';
-
-  var pinImg = element.querySelector('img');
-  console.log(pinImg)
-  pinImg.src = offerArray[i].author.avatar;
-  pinsArray.appendChild(element)
+  fragment.appendChild(renderPin(offerArray[i]))
 }
+
+pinsArray.appendChild(fragment);
+
+
+
+var offerCardTemplate = document.querySelector('#card');
+var fragmentOffersCards = document.createDocumentFragment();
+
+//Мне стыдно за эту функцию, как это можно сделать более красиво?//
+function offerNameType(offerType){
+  if (offerType === "flat" ){
+    return ("Квартира")
+  }
+  if (offerType === "bungalo" ){
+    return ("Бунгало")
+  }
+  if (offerType === "house" ){
+    return ("Дом")
+  }
+  if (offerType === "palace" ){
+    return ("Дворец")
+  }
+}
+
+
+
+
+function renderPinCard(offer){
+
+  var offerCardElement = offerCardTemplate.cloneNode(true);
+  offerCardElement.querySelector(".popup__title").textContent = offer.title;
+  offerCardElement.querySelector(".popup__text--address").textContent = offer.address;
+  offerCardElement.querySelector(".popup__text--price").textContent = offer.price + "₽/ночь";
+  offerCardElement.querySelector(".popup__type").textContent = offerNameType(offer.type);
+  offerCardElement.querySelector(".popup__text--capacity").textContent = `${offer.rooms} комнаты для ${offer.guests}`;
+  offerCardElement.querySelector(".popup__text--time").textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+
+  var offerFeatures = offerCardElement.querySelector(".popup__features");
+  offer.features.forEach(element => {
+    var newItemFeatures = offerFeatures.createElement('li');
+    newItemFeatures.className = `popup__feature popup__feature--${element}`
+  });
+  offerCardTemplate.querySelector(".popup__description") = offer.description;
+
+  var offerFeaturesPhotos = offerCardElement.querySelector('.popup__photos')
+
+  offer.photos.forEach(element=>{
+    var newItemPhoto = offerFeaturesPhotos.createElement('img');
+    newItemPhoto.src = element;
+  })
+
+}
+
+
+for (var i = 0; i < offerArray.length; i++){
+  var newOfferCard = renderPinCard(offerArray[i])
+  fragmentOffersCards.appendChild(newOfferCard)
+}
+
+
+var map = document.querySelector('.map')
+
+map.appendChild(fragmentOffersCards)
+
 
