@@ -38,7 +38,7 @@ function advArrayGenerator(){
         "title": arrayTitle[i],
         "address":[Math.random()*1000, Math.random()*1000],
         "price": Math.floor(Math.random()*10000),
-        "type":typeArray.randElement,
+        "type": typeArray.randElement(),
         "rooms":Math.floor(Math.random()*10),
         "guests":5,
         "checkin":checkinTimes.randElement(),
@@ -92,18 +92,91 @@ var randomArrayGenerator = function(array){
 //Insert in DOM
 
 var offerArray = advArrayGenerator();
-console.log(offerArray)
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin')
 var pinsArray = document.querySelector('.map__pins')
+var fragment = document.createDocumentFragment();
+
+function renderPin(offerArrayItem){
+  var pinElement = pinTemplate.cloneNode(true);
+  pinElement.style.left = offerArrayItem.location.x +'px';
+  pinElement.style.top = offerArrayItem.location.y+'px';
+  // var pinImg = pinElement.querySelector('img');
+  pinElement.querySelector('img').src = offerArrayItem.author.avatar;
+  return pinElement;
+}
 
 for (var i = 0; i < offerArray.length; i++){
-  var element = pinTemplate.cloneNode(true);
-  element.style.left = offerArray[i].location.x +'px';
-  element.style.top = offerArray[i].location.y+'px';
-
-  var pinImg = element.querySelector('img');
-  console.log(pinImg)
-  pinImg.src = offerArray[i].author.avatar;
-  pinsArray.appendChild(element)
+  fragment.appendChild(renderPin(offerArray[i]))
 }
+
+pinsArray.appendChild(fragment);
+
+
+
+var offerCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var mapBlock = document.querySelector('.map')
+
+// var fragmentOffersCards = document.createDocumentFragment();
+
+//Мне стыдно за эту функцию, как это можно сделать более красиво?//
+function offerNameType(offerType){
+  if (offerType === "flat" ){
+    return ("Квартира")
+  }
+  if (offerType === "bungalo" ){
+    return ("Бунгало")
+  }
+  if (offerType === "house" ){
+    return ("Дом")
+  }
+  if (offerType === "palace" ){
+    return ("Дворец")
+  }
+}
+
+
+
+
+function renderPinCard(offerCard){
+  console.log(offerCard.offer.title);
+  var offerCardElement = offerCardTemplate.cloneNode(true);
+  offerCardElement.querySelector(".popup__title").textContent = offerCard.offer.title;
+  offerCardElement.querySelector(".popup__text--address").textContent = offerCard.offer.address;
+  offerCardElement.querySelector(".popup__text--price").textContent = offerCard.offer.price + "₽/ночь";
+  offerCardElement.querySelector(".popup__type").textContent = offerNameType(offerCard.offer.type);
+  offerCardElement.querySelector(".popup__text--capacity").textContent = `${offerCard.offer.rooms} комнаты для ${offerCard.offer.guests}`;
+  offerCardElement.querySelector(".popup__text--time").textContent = `Заезд после ${offerCard.offer.checkin}, выезд до ${offerCard.offer.checkout}`;
+
+  var offerFeatures = offerCardElement.querySelector(".popup__features");
+
+  offerCard.offer.features.forEach(element => {
+    var newItemFeatures = document.createElement('li');
+    newItemFeatures.className = `popup__feature popup__feature--${element}`
+    offerFeatures.appendChild(newItemFeatures)
+  });
+  offerCardElement.querySelector(".popup__description").textContent = offerCard.offer.description;
+
+  var offerFeaturesPhotos = offerCardElement.querySelector('.popup__photos')
+
+  offerCard.offer.photos.forEach(element=>{
+    var newItemPhoto = document.createElement('img');
+    newItemPhoto.src = element;
+    offerFeaturesPhotos.appendChild(newItemPhoto)
+  })
+
+  return offerCardElement;
+}
+
+var map = document.querySelector('.map')
+var insertBeforeMapFilters = map.querySelector('.map__filters-container')
+var fragmentOfferCards = document.createDocumentFragment();
+
+for (var i = 0; i < offerArray.length; i++){
+  var newOfferCard = renderPinCard(offerArray[i])
+  fragmentOfferCards.appendChild(newOfferCard)
+}
+
+map.insertBefore(fragmentOfferCards, insertBeforeMapFilters);
+
+
 
