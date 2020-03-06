@@ -36,7 +36,7 @@ function advArrayGenerator(){
 
       "offer":{
         "title": arrayTitle[i],
-        "address":[Math.random()*1000, Math.random()*1000],
+        "address":[Math.floor(Math.random()*1000), Math.floor(Math.random()*1000)],
         "price": Math.floor(Math.random()*10000),
         "type": typeArray.randElement(),
         "rooms":Math.floor(Math.random()*10),
@@ -134,11 +134,11 @@ function offerNameType(offerType){
   }
 }
 
+var PHOTO_SIZE = {width: '45', height: '40'};
 
-
+console.log(offerArray);
 
 function renderPinCard(offerCard){
-  console.log(offerCard.offer.title);
   var offerCardElement = offerCardTemplate.cloneNode(true);
   offerCardElement.querySelector(".popup__title").textContent = offerCard.offer.title;
   offerCardElement.querySelector(".popup__text--address").textContent = offerCard.offer.address;
@@ -146,6 +146,7 @@ function renderPinCard(offerCard){
   offerCardElement.querySelector(".popup__type").textContent = offerNameType(offerCard.offer.type);
   offerCardElement.querySelector(".popup__text--capacity").textContent = `${offerCard.offer.rooms} комнаты для ${offerCard.offer.guests}`;
   offerCardElement.querySelector(".popup__text--time").textContent = `Заезд после ${offerCard.offer.checkin}, выезд до ${offerCard.offer.checkout}`;
+  offerCardElement.querySelector(".popup__avatar").src = offerCard.author.avatar;
 
   var offerFeatures = offerCardElement.querySelector(".popup__features");
 
@@ -159,11 +160,16 @@ function renderPinCard(offerCard){
   var offerFeaturesPhotos = offerCardElement.querySelector('.popup__photos')
 
   offerCard.offer.photos.forEach(element=>{
+    console.log(element);
     var newItemPhoto = document.createElement('img');
+    newItemPhoto.classList.add('popup__photo');
     newItemPhoto.src = element;
+    newItemPhoto.width = PHOTO_SIZE.width;
+    newItemPhoto.height = PHOTO_SIZE.height;
+    newItemPhoto.alt = 'Фотография жилья';
     offerFeaturesPhotos.appendChild(newItemPhoto)
   })
-
+  console.log(offerCardElement)
   return offerCardElement;
 }
 
