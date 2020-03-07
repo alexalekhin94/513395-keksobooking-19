@@ -78,8 +78,8 @@ var randomArrayGenerator = function(array){
   var arrayforMocap = array.map(item => item);
   var arrayCount = Math.floor(Math.random() * array.length);
   for ( var i = 0; i < arrayCount; i++ ) {
-    var ind = Math.floor(Math.random() * array.length);
-    randomArray.push(array[ind])
+    var ind = Math.floor(Math.random() * arrayforMocap.length);
+    randomArray.push(arrayforMocap[ind])
     arrayforMocap.splice(ind, 1);
   }
   return randomArray;
@@ -149,6 +149,9 @@ function renderPinCard(offerCard){
   offerCardElement.querySelector(".popup__avatar").src = offerCard.author.avatar;
 
   var offerFeatures = offerCardElement.querySelector(".popup__features");
+  while (offerFeatures.firstChild) {
+    offerFeatures.removeChild(offerFeatures.firstChild);
+  }
 
   offerCard.offer.features.forEach(element => {
     var newItemFeatures = document.createElement('li');
@@ -159,8 +162,12 @@ function renderPinCard(offerCard){
 
   var offerFeaturesPhotos = offerCardElement.querySelector('.popup__photos')
 
+  while (offerFeaturesPhotos.firstChild) {
+    offerFeaturesPhotos.removeChild(offerFeaturesPhotos.firstChild);
+  }
+
   offerCard.offer.photos.forEach(element=>{
-    console.log(element);
+
     var newItemPhoto = document.createElement('img');
     newItemPhoto.classList.add('popup__photo');
     newItemPhoto.src = element;
